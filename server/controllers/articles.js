@@ -4,94 +4,94 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-  Article = mongoose.model('Article'),
+  Product = mongoose.model('Product'),
   _ = require('lodash');
 
 
 /**
- * Find article by id
+ * Find product by id
  */
-exports.article = function(req, res, next, id) {
-  Article.load(id, function(err, article) {
+exports.product = function(req, res, next, id) {
+  Product.load(id, function(err, product) {
     if (err) return next(err);
-    if (!article) return next(new Error('Failed to load article ' + id));
-    req.article = article;
+    if (!product) return next(new Error('Failed to load product ' + id));
+    req.product = product;
     next();
   });
 };
 
 /**
- * Create an article
+ * Create an product
  */
 exports.create = function(req, res) {
-  var article = new Article(req.body);
-  article.user = req.user;
+  var product = new Product(req.body);
+  product.user = req.user;
 
-  article.save(function(err) {
+  product.save(function(err) {
     if (err) {
       return res.json(500, {
-        error: 'Cannot save the article'
+        error: 'Cannot save the product'
       });
     }
-    res.json(article);
+    res.json(product);
 
   });
 };
 
 /**
- * Update an article
+ * Update an product
  */
 exports.update = function(req, res) {
-  var article = req.article;
+  var product = req.product;
 
-  article = _.extend(article, req.body);
+  product = _.extend(product, req.body);
 
-  article.save(function(err) {
+  product.save(function(err) {
     if (err) {
       return res.json(500, {
-        error: 'Cannot update the article'
+        error: 'Cannot update the product'
       });
     }
-    res.json(article);
+    res.json(product);
 
   });
 };
 
 /**
- * Delete an article
+ * Delete an product
  */
 exports.destroy = function(req, res) {
-  var article = req.article;
+  var product = req.product;
 
-  article.remove(function(err) {
+  product.remove(function(err) {
     if (err) {
       return res.json(500, {
-        error: 'Cannot delete the article'
+        error: 'Cannot delete the product'
       });
     }
-    res.json(article);
+    res.json(product);
 
   });
 };
 
 /**
- * Show an article
+ * Show an product
  */
 exports.show = function(req, res) {
-  res.json(req.article);
+  res.json(req.product);
 };
 
 /**
- * List of Articles
+ * List of Products
  */
 exports.all = function(req, res) {
-  Article.find().sort('-created').populate('user', 'name username').exec(function(err, articles) {
+  Product.find().sort('-created').populate('user', 'name username').exec(function(err, products) {
     if (err) {
       return res.json(500, {
-        error: 'Cannot list the articles'
+        error: 'Cannot list the products'
       });
     }
-    res.json(articles);
+    res.json(products);
 
   });
 };

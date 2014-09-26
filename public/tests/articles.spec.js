@@ -1,9 +1,9 @@
 'use strict';
 
 (function() {
-  // Articles Controller Spec
+  // Products Controller Spec
   describe('MEAN controllers', function() {
-    describe('ArticlesController', function() {
+    describe('ProductsController', function() {
       // The $resource service augments the response object with methods for updating and deleting the resource.
       // If we were to use the standard toEqual matcher, our tests would fail because the test values would not match
       // the responses exactly. To solve the problem, we use a newly-defined toEqualData Jasmine matcher.
@@ -20,11 +20,11 @@
       beforeEach(function() {
         module('mean');
         module('mean.system');
-        module('mean.articles');
+        module('mean.products');
       });
 
       // Initialize the controller and a mock scope
-      var ArticlesController,
+      var ProductsController,
         scope,
         $httpBackend,
         $stateParams,
@@ -37,7 +37,7 @@
 
         scope = $rootScope.$new();
 
-        ArticlesController = $controller('ArticlesController', {
+        ProductsController = $controller('ProductsController', {
           $scope: scope
         });
 
@@ -49,12 +49,12 @@
 
       }));
 
-      it('$scope.find() should create an array with at least one article object ' +
+      it('$scope.find() should create an array with at least one product object ' +
         'fetched from XHR', function() {
 
           // test expected GET request
-          $httpBackend.expectGET('articles').respond([{
-            title: 'An Article about MEAN',
+          $httpBackend.expectGET('products').respond([{
+            title: 'An Product about MEAN',
             content: 'MEAN rocks!'
           }]);
 
@@ -63,35 +63,35 @@
           $httpBackend.flush();
 
           // test scope value
-          expect(scope.articles).toEqualData([{
-            title: 'An Article about MEAN',
+          expect(scope.products).toEqualData([{
+            title: 'An Product about MEAN',
             content: 'MEAN rocks!'
           }]);
 
         });
 
-      it('$scope.findOne() should create an array with one article object fetched ' +
-        'from XHR using a articleId URL parameter', function() {
+      it('$scope.findOne() should create an array with one product object fetched ' +
+        'from XHR using a productId URL parameter', function() {
           // fixture URL parament
-          $stateParams.articleId = '525a8422f6d0f87f0e407a33';
+          $stateParams.productId = '525a8422f6d0f87f0e407a33';
 
           // fixture response object
-          var testArticleData = function() {
+          var testProductData = function() {
             return {
-              title: 'An Article about MEAN',
+              title: 'An Product about MEAN',
               content: 'MEAN rocks!'
             };
           };
 
           // test expected GET request with response object
-          $httpBackend.expectGET(/articles\/([0-9a-fA-F]{24})$/).respond(testArticleData());
+          $httpBackend.expectGET(/products\/([0-9a-fA-F]{24})$/).respond(testProductData());
 
           // run controller
           scope.findOne();
           $httpBackend.flush();
 
           // test scope value
-          expect(scope.article).toEqualData(testArticleData());
+          expect(scope.product).toEqualData(testProductData());
 
         });
 
@@ -100,28 +100,28 @@
         'locate to new object URL', function() {
 
           // fixture expected POST data
-          var postArticleData = function() {
+          var postProductData = function() {
             return {
-              title: 'An Article about MEAN',
+              title: 'An Product about MEAN',
               content: 'MEAN rocks!'
             };
           };
 
           // fixture expected response data
-          var responseArticleData = function() {
+          var responseProductData = function() {
             return {
               _id: '525cf20451979dea2c000001',
-              title: 'An Article about MEAN',
+              title: 'An Product about MEAN',
               content: 'MEAN rocks!'
             };
           };
 
           // fixture mock form input values
-          scope.title = 'An Article about MEAN';
+          scope.title = 'An Product about MEAN';
           scope.content = 'MEAN rocks!';
 
           // test post request is sent
-          $httpBackend.expectPOST('articles', postArticleData()).respond(responseArticleData());
+          $httpBackend.expectPOST('products', postProductData()).respond(responseProductData());
 
           // Run controller
           scope.create(true);
@@ -132,35 +132,35 @@
           expect(scope.content).toEqual('');
 
           // test URL location to new object
-          expect($location.path()).toBe('/articles/' + responseArticleData()._id);
+          expect($location.path()).toBe('/products/' + responseProductData()._id);
         });
 
-      it('$scope.update(true) should update a valid article', inject(function(Articles) {
+      it('$scope.update(true) should update a valid product', inject(function(Products) {
 
         // fixture rideshare
-        var putArticleData = function() {
+        var putProductData = function() {
           return {
             _id: '525a8422f6d0f87f0e407a33',
-            title: 'An Article about MEAN',
+            title: 'An Product about MEAN',
             to: 'MEAN is great!'
           };
         };
 
-        // mock article object from form
-        var article = new Articles(putArticleData());
+        // mock product object from form
+        var product = new Products(putProductData());
 
-        // mock article in scope
-        scope.article = article;
+        // mock product in scope
+        scope.product = product;
 
         // test PUT happens correctly
-        $httpBackend.expectPUT(/articles\/([0-9a-fA-F]{24})$/).respond();
+        $httpBackend.expectPUT(/products\/([0-9a-fA-F]{24})$/).respond();
 
         // testing the body data is out for now until an idea for testing the dynamic updated array value is figured out
-        //$httpBackend.expectPUT(/articles\/([0-9a-fA-F]{24})$/, putArticleData()).respond();
+        //$httpBackend.expectPUT(/products\/([0-9a-fA-F]{24})$/, putProductData()).respond();
         /*
-                Error: Expected PUT /articles\/([0-9a-fA-F]{24})$/ with different data
-                EXPECTED: {"_id":"525a8422f6d0f87f0e407a33","title":"An Article about MEAN","to":"MEAN is great!"}
-                GOT:      {"_id":"525a8422f6d0f87f0e407a33","title":"An Article about MEAN","to":"MEAN is great!","updated":[1383534772975]}
+                Error: Expected PUT /products\/([0-9a-fA-F]{24})$/ with different data
+                EXPECTED: {"_id":"525a8422f6d0f87f0e407a33","title":"An Product about MEAN","to":"MEAN is great!"}
+                GOT:      {"_id":"525a8422f6d0f87f0e407a33","title":"An Product about MEAN","to":"MEAN is great!","updated":[1383534772975]}
                 */
 
         // run controller
@@ -168,32 +168,32 @@
         $httpBackend.flush();
 
         // test URL location to new object
-        expect($location.path()).toBe('/articles/' + putArticleData()._id);
+        expect($location.path()).toBe('/products/' + putProductData()._id);
 
       }));
 
-      it('$scope.remove() should send a DELETE request with a valid articleId ' +
-        'and remove the article from the scope', inject(function(Articles) {
+      it('$scope.remove() should send a DELETE request with a valid productId ' +
+        'and remove the product from the scope', inject(function(Products) {
 
           // fixture rideshare
-          var article = new Articles({
+          var product = new Products({
             _id: '525a8422f6d0f87f0e407a33'
           });
 
           // mock rideshares in scope
-          scope.articles = [];
-          scope.articles.push(article);
+          scope.products = [];
+          scope.products.push(product);
 
           // test expected rideshare DELETE request
-          $httpBackend.expectDELETE(/articles\/([0-9a-fA-F]{24})$/).respond(204);
+          $httpBackend.expectDELETE(/products\/([0-9a-fA-F]{24})$/).respond(204);
 
           // run controller
-          scope.remove(article);
+          scope.remove(product);
           $httpBackend.flush();
 
-          // test after successful delete URL location articles list
-          //expect($location.path()).toBe('/articles');
-          expect(scope.articles.length).toBe(0);
+          // test after successful delete URL location products list
+          //expect($location.path()).toBe('/products');
+          expect(scope.products.length).toBe(0);
 
         }));
     });

@@ -1,10 +1,10 @@
 'use strict';
 
-//Articles service used for articles REST endpoint
-angular.module('mean.articles').factory('Articles', ['$resource',
+//Products service used for products REST endpoint
+angular.module('mean.products').factory('Products', ['$resource',
   function($resource) {
-    return $resource('articles/:articleId', {
-      articleId: '@_id'
+    return $resource('products/:productId', {
+      productId: '@_id'
     }, {
       update: {
         method: 'PUT'
